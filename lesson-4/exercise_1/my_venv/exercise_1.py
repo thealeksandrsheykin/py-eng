@@ -9,5 +9,6 @@ GigabitEthernet. Полученную новую строку вывести н�
 nat = "ip nat inside source list ACL interface FastEthernet0/1 overload"
 """
 
+
 nat = "ip nat inside source list ACL interface FastEthernet0/1 overload"
 print(f'{nat.replace("Fast","Gigabit")}')
