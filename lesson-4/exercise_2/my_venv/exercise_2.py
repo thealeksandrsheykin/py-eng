@@ -9,3 +9,4 @@
 mac = "AAAA:BBBB:CCCC"
 """
 mac = "AAAA:BBBB:CCCC"
+print(f'{mac.replace(":",".")}')
