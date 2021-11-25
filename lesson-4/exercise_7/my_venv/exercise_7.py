@@ -10,3 +10,6 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 mac = "AAAA:BBBB:CCCC"
 """
+mac = "AAAA:BBBB:CCCC"
+mac_list = mac.split(':')
+print(f'{int(mac_list[0],16):08b}{int(mac_list[1],16):08b}{int(mac_list[2],16):08b}')
