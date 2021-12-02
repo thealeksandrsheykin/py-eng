@@ -22,3 +22,30 @@ Mask:
 
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
+
+network = input('Введите IP-сеть в формате: A.B.C.D/L: ')
+
+ip,length = network.split('/')
+
+octets = ip.split('.')
+mask_bin = '1' * int(length) + '0' * (32-int(length))
+
+
+template_ip = '''
+Network:
+{:<8} {:<8} {:<8} {:<8}
+{:08b} {:08b} {:08b} {:08b}'''
+
+template_mask = '''
+Mask:
+{:<8} {:<8} {:<8} {:<8}  
+{:<8} {:<8} {:<8} {:<8}
+'''
+
+print(template_ip.format(octets[0],     octets[1],      octets[2],      octets[3],
+                     int(octets[0]),int(octets[1]), int(octets[2]), int(octets[3])))
+
+print(template_mask.format(int(mask_bin[0:8],2),int(mask_bin[8:16],2),int(mask_bin[16:24],2),int(mask_bin[24:32],2),
+                               mask_bin[0:8],       mask_bin[8:16],       mask_bin[16:24],       mask_bin[24:32]))
+
+
