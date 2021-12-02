@@ -38,6 +38,7 @@ Network:
 
 template_mask = '''
 Mask:
+/{}
 {:<8} {:<8} {:<8} {:<8}  
 {:<8} {:<8} {:<8} {:<8}
 '''
@@ -45,7 +46,7 @@ Mask:
 print(template_ip.format(octets[0],     octets[1],      octets[2],      octets[3],
                      int(octets[0]),int(octets[1]), int(octets[2]), int(octets[3])))
 
-print(template_mask.format(int(mask_bin[0:8],2),int(mask_bin[8:16],2),int(mask_bin[16:24],2),int(mask_bin[24:32],2),
+print(template_mask.format(length,int(mask_bin[0:8],2),int(mask_bin[8:16],2),int(mask_bin[16:24],2),int(mask_bin[24:32],2),
                                mask_bin[0:8],       mask_bin[8:16],       mask_bin[16:24],       mask_bin[24:32]))
 
 
