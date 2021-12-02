@@ -31,3 +31,46 @@ Mask:
 00001010000000010000000111000000
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
+
+network = input('Введите IP-сеть в формате: A.B.C.D/L: ')
+
+ip_dec,length = network.split('/')
+length = int(length)
+
+octets = ip_dec.split('.')
+
+ip_bin = '{:08b}{:08b}{:08b}{:08b}'.format(int(octets[0]),int(octets[1]),int(octets[2]),int(octets[3]))
+
+net_bin = ip_bin[:length] + '0' * (32-length)
+
+net_dec_1 = int(int(net_bin[0:8],  2))
+net_dec_2 = int(int(net_bin[8:16], 2))
+net_dec_3 = int(int(net_bin[16:24],2))
+net_dec_4 = int(int(net_bin[24:32],2))
+
+mask_bin = '1' * length + '0' * (32-length)
+
+mask_dec_1 = int(int(mask_bin[0:8],  2))
+mask_dec_2 = int(int(mask_bin[8:16], 2))
+mask_dec_3 = int(int(mask_bin[16:24],2))
+mask_dec_4 = int(int(mask_bin[24:32],2))
+
+
+
+template_ip = '''
+Network:
+{:<8} {:<8} {:<8} {:<8}
+{:08b} {:08b} {:08b} {:08b}'''
+
+template_mask = '''
+Mask:
+/{}
+{:<8} {:<8} {:<8} {:<8}
+{:08b} {:08b} {:08b} {:08b}'''
+
+
+print(template_ip.format(net_dec_1,net_dec_2,net_dec_3,net_dec_4,
+                         net_dec_1,net_dec_2,net_dec_3,net_dec_4))
+
+print(template_mask.format(length,mask_dec_1,mask_dec_2,mask_dec_3,mask_dec_4,
+                                  mask_dec_1,mask_dec_2,mask_dec_3,mask_dec_4))
