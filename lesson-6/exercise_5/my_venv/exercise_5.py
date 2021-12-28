@@ -41,3 +41,28 @@ for command in access_template:
         print(f" {command}")
 
 """
+
+trunk_template = [
+    "switchport trunk encapsulation dot1q",
+    "switchport mode trunk",
+    "switchport trunk allowed vlan"]
+
+trunk = {"0/1": ["add", "10", "20"], "0/2": ["only", "11", "30"], "0/4": ["del","17"]}
+
+for intf,vlan in trunk.items():
+    print(f"interface FastEthernet {intf}")
+    for command in trunk_template:
+        if command.endswith("allowed vlan"):
+            operation = vlan[0]
+            vlans = ",".join(vlan[1:])
+            if operation == 'only':
+                print(" {} {}".format("switchport trunk allowed vlan",vlans))
+            elif operation == 'add':
+                print(" {} {}".format("switchport trunk allowed vlan add",vlans))
+            elif operation == 'del':
+                print(" {} {}".format("switchport trunk allowed vlan remove",vlans))
+        else:
+            print(f" {command}")
+
+
+
