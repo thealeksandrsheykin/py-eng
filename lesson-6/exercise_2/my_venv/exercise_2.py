@@ -12,3 +12,17 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+
+ip = input('Введите IP-aдрес в формате A.B.C.D: ')
+
+my_list = ip.split('.')
+if 1 <= int(my_list[0]) <= 223:
+    print (f'unicast')
+elif 224 <= int(my_list[0]) <= 239:
+    print(f'multicast')
+elif ip == '255.255.255.255':
+    print(f'local broadcast')
+elif ip == '0.0.0.0':
+    print(f'unassigned')
+else:
+    print(f'unused')
