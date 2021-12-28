@@ -12,3 +12,32 @@
 выводиться только один раз, даже если несколько пунктов выше не выполнены.
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
+
+ip = input('Введите IP-aдрес в формате A.B.C.D: ')
+flag = True
+
+my_list = ip.split('.')
+
+if len(my_list) != 4:
+    flag = False
+else:
+    for i in my_list:
+        if not (i.isdigit() and int(i) in range(256)):
+            flag = False
+        else:
+            pass
+
+
+if not flag:
+    print(f'Неправильный IP-адрес')
+else:
+    if 1 <= int(my_list[0]) <= 223:
+        print (f'unicast')
+    elif 224 <= int(my_list[0]) <= 239:
+        print(f'multicast')
+    elif ip == '255.255.255.255':
+        print(f'local broadcast')
+    elif ip == '0.0.0.0':
+        print(f'unassigned')
+    else:
+        print(f'unused')
