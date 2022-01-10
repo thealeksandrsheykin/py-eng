@@ -11,6 +11,7 @@ Last update 3d18h
 Outbound Interface FastEthernet0/0
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
+
 array = list()
 with open (r'ospf.txt', 'r') as file:
     for line in file:
