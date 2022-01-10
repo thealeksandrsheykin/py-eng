@@ -2,8 +2,8 @@
 # !/usr/bin/env python3
 
 """
-Создать скрипт, который будет обрабатывать конфигурационный файл config_sw1.txt. Имя
-файла передается как аргумент скрипту.
+Создать скрипт, который будет обрабатывать конфигурационный файл config_sw1.txt. Имя файла передается как аргумент
+скрипту.
 Скрипт должен возвращать на стандартный поток вывода команды из переданного конфигурационного файла, исключая строки,
 которые начинаются с !. Вывод должен быть без пустых строк.
 Ограничение: Все задания надо выполнять используя только пройденные темы.
@@ -17,20 +17,27 @@ service timestamps log datetime msec
 no service password-encryption
 hostname sw1
 interface Ethernet0/0
-duplex auto
+ duplex auto
 interface Ethernet0/1
-switchport trunk encapsulation dot1q
-switchport trunk allowed vlan 100
-switchport mode trunk
-duplex auto
-spanning-tree portfast edge trunk
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 100
+ switchport mode trunk
+ duplex auto
+ spanning-tree portfast edge trunk
 interface Ethernet0/2
-duplex auto
+ duplex auto
 interface Ethernet0/3
-switchport trunk encapsulation dot1q
-switchport trunk allowed vlan 100
-duplex auto
-switchport mode trunk
-spanning-tree portfast edge trunk
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 100
+ duplex auto
+ switchport mode trunk
+ spanning-tree portfast edge trunk
 ...
 """
+
+with open (r'config_sw1.txt', 'r') as file:
+    for line in file:
+        if line.startswith('!'):
+            continue
+        else:
+            print(f'{line.rstrip()}')
