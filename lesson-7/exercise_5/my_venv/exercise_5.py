@@ -15,7 +15,7 @@
     1000 0a4b.c380.7d00 Gi0/9
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 """
-
+# Первый вариант
 with open (r'CAM_table.txt', 'r') as file:
     for line in file:
         line = line.rstrip()
@@ -25,5 +25,17 @@ with open (r'CAM_table.txt', 'r') as file:
             print(f'{line_array[0]:<5} {line_array[1]:<15} {line_array[2]:<5}')
         else:
             continue
+print(f'{24 * "-"}')
+# Второй вариант
+with open (r'CAM_table.txt', 'r') as file:
+    for line in file:
+        line = line.rstrip()
+        my_list = line.split()
+        if my_list and my_list[0].isdigit():
+            vlan,mac,_,interface = my_list
+            print(f'{vlan:<5} {mac:<15} {interface:<5}')
+        else:
+            continue
+
 
 
