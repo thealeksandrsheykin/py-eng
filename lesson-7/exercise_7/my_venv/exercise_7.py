@@ -12,3 +12,15 @@
     10 01ab.c5d0.70d0 Gi0/8
 Ограничение: Все задания надо выполнять используя только пройденные темы
 """
+vlan = input('Enter VLAN number: ')
+
+with open (r'CAM_table.txt', 'r') as file:
+    for line in file:
+        line = line.rstrip()
+        line_list = line.split()
+        if line_list and line_list[0].isdigit and line_list[0] == vlan:
+            print(f'{line_list[0]:<5} {line_list[1]:<15} {line_list[3]:<5}')
+        else:
+            continue
+
+
