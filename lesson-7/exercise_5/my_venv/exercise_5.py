@@ -25,3 +25,5 @@ with open (r'CAM_table.txt', 'r') as file:
             print(f'{line_array[0]:<5} {line_array[1]:<15} {line_array[2]:<5}')
         else:
             continue
+
+
