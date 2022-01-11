@@ -31,3 +31,6 @@ with open (r'CAM_table.txt', 'r') as file:
 
 for line in sorted(my_list):
     print(f'{line[0]:<5} {line[1]:<15} {line[2]:<5}')
+
+
+
