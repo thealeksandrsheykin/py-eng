@@ -30,9 +30,9 @@ print(f'{24 * "-"}')
 # Второй вариант
 with open (r'config_sw1.txt','r') as file:
     for line in file:
-        array = line.split()
-        tmp = set(array) & set(ignore)
-        if line.startswith('!') or tmp:
+        line_array = line.split()
+        line_set = set(array) & set(ignore)
+        if line.startswith('!') or line_set:
             continue
         else:
             print(f'{line.rstrip()}')
