@@ -22,7 +22,6 @@ with open (r'config_sw1.txt', 'r') as file:
         if line.startswith('!') or flag:
             continue
         else:
-            pass
             print(f'{line.rstrip()}')
 
 print(f'{24 * "-"}')
