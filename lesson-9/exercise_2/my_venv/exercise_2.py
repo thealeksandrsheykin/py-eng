@@ -29,3 +29,44 @@
 
     access_config = {"FastEthernet0/12": 10, "FastEthernet0/14": 11, "FastEthernet0/16": 17}
 """
+
+def generate_access_config(intf_vlan_mapping,access_template,psecurity=None):
+    """
+    :param intf_valn_mapping: словарь с соответствием интерфейс-VLAN такого вида:
+                                        {"FastEthernet0/12": 10,
+                                         "FastEthernet0/14": 11,
+                                         "FastEthernet0/16": 17}
+    :param access_template:  список команд для порта в режиме access
+    :param psecurity: список команд port-security
+    :return: список всех портов в режиме access с конфигурацией на основе шаблона
+    """
+    my_list = list()
+    for intf,vlan in intf_vlan_mapping.items():
+        my_list.append(f'interface {intf}')
+        for line in access_template:
+            if line.endswith('vlan'):
+                my_list.append(f'{line} {vlan}')
+            else:
+                my_list.append(f'{line}')
+        if psecurity:
+            for line in psecurity:
+                my_list.append(f'{line}')
+    return my_list
+
+if __name__ == '__main__':
+    access_mode_template = [
+        "switchport mode access", "switchport access vlan",
+        "switchport nonegotiate", "spanning-tree portfast",
+        "spanning-tree bpduguard enable"
+    ]
+
+    port_security_template = [
+        "switchport port-security maximum 2",
+        "switchport port-security violation restrict",
+        "switchport port-security"
+    ]
+
+    access_config = {"FastEthernet0/12": 10, "FastEthernet0/14": 11, "FastEthernet0/16": 17}
+
+    for i in generate_access_config(access_config, access_mode_template, port_security_template):
+        print(i)
