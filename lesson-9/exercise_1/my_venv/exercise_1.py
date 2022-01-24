@@ -67,9 +67,9 @@ def generate_access_config(intf_vlan_mapping,access_template):
         my_list.append(f'interface {intf}')
         for line in access_template:
             if line.endswith('vlan'):
-                my_list.append(f' {line} {vlan}')
+                my_list.append(f'{line} {vlan}')
             else:
-                my_list.append(f' {line}')
+                my_list.append(f'{line}')
     return my_list
 
 if __name__ == '__main__':
