@@ -49,8 +49,7 @@ def generate_access_config(intf_vlan_mapping,access_template,psecurity=None):
             else:
                 my_list.append(f'{line}')
         if psecurity:
-            for line in psecurity:
-                my_list.append(f'{line}')
+                my_list.extend(psecurity)
     return my_list
 
 if __name__ == '__main__':
