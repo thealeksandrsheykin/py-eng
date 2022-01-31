@@ -41,3 +41,38 @@ trunk_config = {
 }
 
 """
+
+def generate_trunk_config(intf_vlan_mapping, trunk_template):
+    """
+    :param   intf_vlan_mapping: словарь с соответствием интерфейс-VLANы
+    :param   trunk_template: шаблон конфигурации trunk-портов в виде списка команд
+    :return: список команд с конфигурацией
+    """
+    my_list = list()
+    for intf,vlans in trunk_config.items():
+        my_list.append(f'interface {intf}')
+        for line in trunk_template:
+            if line.endswith('allowed vlan'):
+
+                my_list.append(f'{line} {",".join([str(j) for j in vlans])}')
+            else:
+                my_list.append(line)
+    return my_list
+
+
+
+if __name__ == '__main__':
+
+    trunk_mode_template = [
+        "switchport mode trunk", "switchport trunk native vlan 999",
+        "switchport trunk allowed vlan"
+    ]
+
+    trunk_config = {
+        "FastEthernet0/1": [10, 20, 30],
+        "FastEthernet0/2": [11, 30],
+        "FastEthernet0/4": [17]
+    }
+    for i in generate_trunk_config(trunk_config,trunk_mode_template):
+        print(f'{i}')
+
