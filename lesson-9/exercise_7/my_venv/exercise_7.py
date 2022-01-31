@@ -77,4 +77,5 @@ def ignore_command(command, ignore):
     return ignore_status
 
 if __name__ == '__main__':
-    convert_config_to_dict('config_sw1.txt')
+    for i,j in convert_config_to_dict('config_sw1.txt').items():
+        print(i,j)
