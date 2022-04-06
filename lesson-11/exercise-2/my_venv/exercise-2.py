@@ -26,3 +26,16 @@ infiles = [
     "sh_cdp_n_r3.txt"]
 
 '''
+
+def create_network_map(filenames):
+    """
+    Функция обрабатывает вывод команды show cdp neighbors из нескольких файлов и объединяет
+    его в одну общую топологию.
+    :param filenames: список с именами файлов, в которых находится вывод команды show cdp neighbors
+    :return: словарь, который описывает соединения между устройствами
+    """
+
+
+if __name__ == '__main__':
+    infiles = ["sh_cdp_n_sw1.txt","sh_cdp_n_r1.txt","sh_cdp_n_r2.txt","sh_cdp_n_r3.txt"]
+    create_network_map(infiles)
