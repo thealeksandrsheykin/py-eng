@@ -27,6 +27,9 @@ infiles = [
 
 '''
 
+from exercise import parse_cdp_neighbors
+
+
 def create_network_map(filenames):
     """
     Функция обрабатывает вывод команды show cdp neighbors из нескольких файлов и объединяет
