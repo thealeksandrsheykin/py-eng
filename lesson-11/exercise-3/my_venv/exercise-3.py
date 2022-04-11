@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 
 '''
-С помощью функции create_network_map из задания 11.2 создать словарь topology с описанием топологии для файлов:
+С помощью функции create_network_map из задания 2 создать словарь topology с описанием топологии для файлов:
     • sh_cdp_n_sw1.txt
     • sh_cdp_n_r1.txt
     • sh_cdp_n_r2.txt
