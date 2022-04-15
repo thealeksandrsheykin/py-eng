@@ -48,6 +48,9 @@ unique_network_map. Результат должен выглядеть так ж
 
 '''
 
+import parse_cdp_neighbors as pcn
+import create_network_map as cnm
+from draw_network_graph import draw_topology
 
 
 if __name__ == '__main__':
