@@ -74,3 +74,4 @@ def draw_topology(topology_dict, output_filename="img/topology"):
     g1 = apply_styles(g1, styles)
     filename = g1.render(filename=output_filename)
     print("Graph saved in", filename)
+

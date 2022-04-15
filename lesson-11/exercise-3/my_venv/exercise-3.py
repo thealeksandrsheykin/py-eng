@@ -39,18 +39,30 @@
     {("R4", "Fa0/1"): ("R5", "Fa0/1"),
      ("R4", "Fa0/2"): ("R6", "Fa0/0")}
 После создания функции, попробовать еще раз нарисовать топологию, теперь уже для словаря, который возвращает функция
-unique_network_map. Результат должен выглядеть так же, как схема в файле task_11_2a_topology.svg
+unique_network_map. Результат должен выглядеть так же, как схема.
 При этом:
     • Расположение устройств на схеме может быть другим
     • Соединения должны соответствовать схеме
 Не копировать код функций create_network_map и draw_topology.
 Ограничение: Все задания надо выполнять используя только пройденные темы.
-
 '''
-
+import os
 import parse_cdp_neighbors as pcn
 import create_network_map as cnm
 from draw_network_graph import draw_topology
+
+
+def unique_network_map(topology_dict):
+    '''
+    :param topology_dict: словарь полученный в результате выполнения функции create_network_map
+    :return: функция должна возвращать словарь, который описывает соединения между устройствами.
+    '''
+    map_dict = dict()
+    for key,value in topology_dict.items():
+        if not map_dict.get(value)== key:
+            map_dict[key] = value
+        else: continue
+    return map_dict
 
 
 if __name__ == '__main__':
@@ -58,5 +70,8 @@ if __name__ == '__main__':
         "sh_cdp_n_sw1.txt",
         "sh_cdp_n_r1.txt",
         "sh_cdp_n_r2.txt",
-        "sh_cdp_n_r3.txt",
-    ]
+        "sh_cdp_n_r3.txt"]
+    map = unique_network_map(cnm.create_network_map(infiles))
+    draw_topology(map)
+
+
