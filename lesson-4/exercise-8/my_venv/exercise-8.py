@@ -29,3 +29,4 @@ ip = '192.168.3.1'
 
 Oct1,Oct2,Oct3,Oct4= ip.split('.')
 print(template.format(ip,int(Oct1),int(Oct2),int(Oct3),int(Oct4)))
+
