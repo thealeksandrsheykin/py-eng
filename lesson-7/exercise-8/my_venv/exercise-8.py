@@ -29,3 +29,5 @@ with open('CAM_table.txt', 'r') as src_file:
             else: continue
       for j in sorted(table): # sorted(table, key=lambda row:int(row[0]))
             print('{} {} {}'.format(j[0],j[1],j[2]))
+
+
