@@ -35,3 +35,4 @@ print('\n'+ '-'*30)
 print('interface {}'.format(interface))
 print('\n'.join((ports.get(mode)).get('template')).format(vlans))
 
+
