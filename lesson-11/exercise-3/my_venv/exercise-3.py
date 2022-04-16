@@ -73,5 +73,7 @@ if __name__ == '__main__':
         "sh_cdp_n_r3.txt"]
     map = unique_network_map(cnm.create_network_map(infiles))
     draw_topology(map)
+	
+	
 
 
