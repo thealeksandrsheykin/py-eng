@@ -74,3 +74,5 @@ for intf, vlan in trunk.items():
             else: pass
         else: print(' {}'.format(command))
 
+
+
