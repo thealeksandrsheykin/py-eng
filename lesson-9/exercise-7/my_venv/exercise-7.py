@@ -62,3 +62,5 @@ def convert_config_to_dict(config_filename):
 result = convert_config_to_dict('config_sw1.txt')
 for i,j in result.items():
     print(i,j)
+	
+	
