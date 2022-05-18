@@ -13,6 +13,20 @@
 Обратите внимание, что в данном случае, можно не проверять корректность IP-адреса, диапазоны адресов и так далее, так как
 обрабатывается вывод команды, а не ввод пользователя.
 '''
+import re
 
-if __main__ == '__name__':
-    pass
+def get_ip_from_cfg(filename):
+    '''
+    Функция обрабатывает конфигурацию
+    :param filename: имя файла
+    :return: IP-адреса и маски, которые настроены на интерфейсах, в виде списка кортежей
+    '''
+    regex = r'interface +\S+.+?ip address (\S+) +(\S+)'
+
+    with open(filename, 'r') as file:
+        return re.findall(regex,file.read(), re.DOTALL)
+
+
+if __name__ == '__main__':
+    for i in get_ip_from_cfg('config_r1.txt'):
+        print(f'{i}')
