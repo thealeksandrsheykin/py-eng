@@ -20,13 +20,22 @@ def get_ip_from_cfg(filename):
     '''
     Функция обрабатывает конфигурацию
     :param filename: имя файла
-    :return: IP-адреса и маски, которые настроены на интерфейсах, в виде списка кортежей
+    :return: возвращает словарь:
+                • ключ:     имя интерфейса
+                • значение: кортеж с двумя строками:
+                            – IP-адрес
+                            – Маска
     '''
-    regex = r'interface +\S+.+?ip address (\S+) +(\S+)'
+    intf_dict = dict()
+    regex = r'interface +(\S+).+?ip address (\S+) +(\S+)'
 
     with open(filename, 'r') as file:
-        return re.findall(regex,file.read(), re.DOTALL)
+        for match in re.finditer(regex,file.read(), re.DOTALL):
+            intf_dict[match.group(1)] = match.groups()[1:]
+    return intf_dict
 
 
 if __name__ == '__main__':
-    get_ip_from_cfg('config_r1.txt')
+    for i,j in (get_ip_from_cfg('config_r1.txt')).items():
+        ip,mask = j
+        print(f'На интерфейсе {i} настроен IP-адреc: {ip} и MASK: {mask}.')
