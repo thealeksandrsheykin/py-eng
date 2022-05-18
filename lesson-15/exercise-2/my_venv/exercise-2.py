@@ -16,6 +16,7 @@
 '''
 import re
 
+# 1.Способ
 def get_ip_from_cfg(filename):
     '''
     Функция обрабатывает конфигурацию
@@ -34,8 +35,23 @@ def get_ip_from_cfg(filename):
             intf_dict[match.group(1)] = match.groups()[1:]
     return intf_dict
 
+#2.Способ
+def get_ip_from_cfg_2(filename):
+
+    intf_dict = dict()
+    regex = r'interface +(\S+).+?ip address (\S+) +(\S+)'
+    with open(filename, 'r') as file:
+        return {match.group(1): match.groups()[1:] for match in re.finditer(regex,file.read(), re.DOTALL)}
+
 
 if __name__ == '__main__':
+    print(f'1.Cпособ:')
     for i,j in (get_ip_from_cfg('config_r1.txt')).items():
         ip,mask = j
         print(f'На интерфейсе {i} настроен IP-адреc: {ip} и MASK: {mask}.')
+    print(f'2.Cпособ:')
+    for i,j in (get_ip_from_cfg_2('config_r1.txt')).items():
+        ip,mask = j
+        print(f'На интерфейсе {i} настроен IP-адреc: {ip} и MASK: {mask}.')
+
+
