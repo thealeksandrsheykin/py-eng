@@ -29,10 +29,15 @@ def get_ip_from_cfg(filename):
                             – Маска
     '''
     intf_dict = dict()
-    regex = r'interface +(\S+).+?ip address (\S+) +(\S+)'
+    regex =(r'interface (\S+)\n(?: .*\n)* ip address \S+ \S+\n( ip address \S+ \S+ secondary\n)*')
+
     with open(filename, 'r') as file:
-        return {match.group(1): match.groups()[1:] for match in re.finditer(regex,file.read(), re.DOTALL)}
+        for match in re.finditer(regex, file.read()):
+            intf_dict[match.group(1)] = re.findall(r'ip address (\S+) (\S+)', match.group())
+    return intf_dict
+
 
 if __name__ == '__main__':
-    get_ip_from_cfg('config_r2.txt')
+    for intf,addresses in get_ip_from_cfg('config_r2.txt').items():
+        print(f'На интерфейсе {intf} настроены адреса: {addresses}')
 
