@@ -26,6 +26,7 @@
 import re
 from datetime import datetime
 
+# 1. Cпособ
 def convert_ios_nat_to_asa(file_in,file_out):
     '''
     Функция конвертирует правила NAT из синтаксиса cisco IOS в cisco ASA.
@@ -39,6 +40,17 @@ def convert_ios_nat_to_asa(file_in,file_out):
             rule = [match.group(1)] + list(match.groups())
             result.write(template.format(*rule))
 
+# 2.Способ
+def convert_ios_nat_to_asa_2(file_in,file_out):
+    template = ('object network LOCAL_{ip}\n'
+                '\thost {ip}\n'
+                '\tnat (inside,outside) static interface service tcp {lport} {gport}\n')
+    with open (file_in, 'r') as data, open(file_out ,'w') as result:
+        for match in re.finditer(r'(?P<ip>[\d+.]+) +(?P<lport>\d+) .* +(?P<gport>\d+)',data.read()):
+            result.write(template.format(**match.groupdict()))
+
+
 if __name__ == '__main__':
     date = "{:%d_%B_%Y}".format(datetime.now())
-    convert_ios_nat_to_asa('cisco_nat_config.txt', f'ASA_{date}.txt')
+    convert_ios_nat_to_asa_2('cisco_nat_config.txt', f'ASA_{date}.txt')
+
