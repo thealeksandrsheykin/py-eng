@@ -15,7 +15,9 @@ description). Пример интерфейса с описанием:
         ip address 10.1.1.1 255.255.255.255
 Проверить работу функции на примере файла config_r1.txt
 '''
+import re
 
+# 1. Cпособ
 def get_ints_without_description(filename):
     '''
     Функция должна обрабатывать конфигурацию.
@@ -23,5 +25,17 @@ def get_ints_without_description(filename):
     :return: возвращать список имен интерфейсов, на которых нет описания (команды description)
     '''
 
+    intf = list()
+    regex =r'interface (\S+[\d+/])\n[^!]*'
+
+    with open(filename, 'r') as file:
+        for match in re.finditer(regex,file.read()):
+            if not re.findall(r'description .*\n',match.group()):
+                intf.append(match.group(1))
+            else:
+                continue
+    return intf
+
+
 if __name__ == '__main__':
-    get_ints_without_description('config_r1.txt')
+    print(get_ints_without_description('config_r1.txt'))
