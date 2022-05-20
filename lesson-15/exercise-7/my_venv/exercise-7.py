@@ -24,7 +24,6 @@ def get_ints_without_description(filename):
     :param filename: имя файла, в котором находится конфигурация устройства
     :return: возвращать список имен интерфейсов, на которых нет описания (команды description)
     '''
-
     intf = list()
     regex =r'interface (\S+[\d+/])\n[^!]*'
 
@@ -36,6 +35,13 @@ def get_ints_without_description(filename):
                 continue
     return intf
 
+# # 2. Способ
+def get_ints_without_description_2(filename):
+    intf = list()
+    regex = r'!\ninterface (?P<interface>(\S+))\n(?P<description> description .*)?'
+
+    with open(filename, 'r') as file:
+        return [match.group('interface') for match in re.finditer(regex,file.read()) if match.lastgroup == 'interface']
 
 if __name__ == '__main__':
     print(get_ints_without_description('config_r1.txt'))
