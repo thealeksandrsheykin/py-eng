@@ -35,7 +35,7 @@ def get_ints_without_description(filename):
                 continue
     return intf
 
-# # 2. Способ
+# 2. Способ
 def get_ints_without_description_2(filename):
     intf = list()
     regex = r'!\ninterface (?P<interface>(\S+))\n(?P<description> description .*)?'
