@@ -36,6 +36,7 @@
 '''
 import re
 import csv
+import glob
 
 def parse_sh_version(sh_version):
     '''
@@ -46,6 +47,15 @@ def parse_sh_version(sh_version):
                     – image  - в формате «flash:c2800-advipservicesk9-mz.124-5.T.bin»
                     – uptime - в формате «5 days, 3 hours, 3 minutes»
     '''
+    regex = (
+        'Cisco IOS .*? Version (?P<ios>\S+), .*'
+        'uptime is (?P<uptime>[\w, ]+).*'
+        'image file is "(?P<image>\S+)".*')
+    match = re.search(regex,sh_version,re.DOTALL)
+    if match:
+        return match.group('ios','image','uptime')
+
+
 
 def write_inventory_to_csv(data_filenames,csv_filename):
     '''
@@ -54,7 +64,18 @@ def write_inventory_to_csv(data_filenames,csv_filename):
     :param csv_filename: имя файла, в который будет записана информация в формате CSV
     :return: ничего не возвращает
     '''
+    headers = ["hostname", "ios", "image", "uptime"]
+    with open (csv_filename, 'w+', newline='') as file_out:
+        writer = csv.writer(file_out, delimiter=';')
+        writer.writerow(headers)
+        for file in data_filenames:
+            hostname = (re.search(r'\S+_(\S+).txt',file)).group(1)
+            with open(file,'r') as file_in:
+                data = list(parse_sh_version(file_in.read()))
+                writer.writerow([hostname]+data)
+
 
 if __name__ == '__main__':
-    write_inventory_to_csv(['sh_version_r1.txt','sh_version_r2.txt','sh_version_r3.txt'],'routers_inventory.csv')
+    sh_version_files = glob.glob("sh_vers*")
+    write_inventory_to_csv(sh_version_files,'routers_inventory.csv')
 
