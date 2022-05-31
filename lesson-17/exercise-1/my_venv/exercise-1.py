@@ -23,7 +23,9 @@ Total number of bindings: 2
 Первый столбец в csv файле имя коммутатора надо получить из имени файла, остальные - из содержимого в файлах.
 Проверить работу функции на содержимом файлов sw1_dhcp_snooping.txt,sw2_dhcp_snooping.txt, sw3_dhcp_snooping.txt.
 '''
+import csv,re
 from datetime import datetime
+
 
 def write_dhcp_snooping_to_csv(filenames,output):
     '''
@@ -33,8 +35,15 @@ def write_dhcp_snooping_to_csv(filenames,output):
     :param output: имя файла в формате csv, в который будет записан результат
     :return: ничего не возвращает
     '''
-
-
+    header = ('switch','mac','ip','vlan','interface')
+    regex = r'([\d:\w]+) +([\d.]+) +\d+ +\S+ +(\d+) +(\S+)\n'
+    with open(output,'w+',newline='') as file_out:
+        writer = csv.writer(file_out, delimiter=';')
+        writer.writerow(header)
+        for file in filenames:
+            devicename,*other = file.split('_')
+            with open(file, 'r') as file_in:
+                writer.writerows([(devicename,) + i for i in re.findall(regex,file_in.read())])
 
 if __name__ == '__main__':
     filelist = ['sw1_dhcp_snooping.txt','sw2_dhcp_snooping.txt','sw3_dhcp_snooping.txt']
