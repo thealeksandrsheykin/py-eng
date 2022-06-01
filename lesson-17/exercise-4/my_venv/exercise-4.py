@@ -26,6 +26,7 @@
 Проверить работу параметра save_to_filename и записать итоговый словарь в файл topology.yaml.
 '''
 import re
+import yaml
 from glob import glob
 from datetime import datetime
 
@@ -36,9 +37,26 @@ def generate_topology_from_cdp(list_of_files,save_to_filename=None):
     :param save_to_filename: имя файла в формате YAML, в который сохранится топология.
     :return: словарь, который описывает соединения между устройствами, независимо от того сохраняется ли топология в файл
     '''
+    neighbor_dict = {}
+    regex = (r'(?P<neighbor>\S+) +(?P<lintf>\S+ [\d+/]+).*?(?P<rintf>\S+ [\d+/]+)')
+
     for file in list_of_files:
+        hostname = re.search(r'.*_(\S+).txt',file).group(1).upper()
+        neighbor_dict[hostname] = {}
+        with open(file, 'r') as file_in:
+            for match in re.finditer(regex, file_in.read()):
+                neighbor,lintf,rintf = match.group('neighbor', 'lintf', 'rintf')
+                neighbor_dict[hostname][lintf] = {neighbor: rintf}
+    if save_to_filename:
+        with open(save_to_filename, 'w+') as file_out:
+            yaml.dump(neighbor_dict,file_out,default_flow_style=False)
+    return neighbor_dict
 
 
 if __name__ == '__main__':
     list_of_files =glob('sh_cdp_n_*.txt')
-    generate_topology_from_cdp(list_of_files) #,'{:res_%H_%M_%S.yml}'.format(datetime.now()))
+    data = generate_topology_from_cdp(list_of_files,'{:res_%H_%M_%S.yml}'.format(datetime.now()))
+    for key, value in data.items():
+        print(f'Device: {key}')
+        for i, j in value.items():
+            print(f'\tLocal Interface: {i} -> Device: {list(j.keys())[0]} Interface: {list(j.values())[0]} ')
