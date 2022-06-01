@@ -15,13 +15,32 @@ R4>show cdp neighbors
 Проверить работу функции на содержимом файла sh_cdp_n_sw1.txt
 '''
 
-def parse_ch_cdp_neighbors(sh_cdp_neighbors):
+import re
+
+def parse_sh_cdp_neighbors(sh_cdp_neighbors):
     '''
     Функция обрабатывает вывод команды show cdp neighbors
     :param sh_cdp_neighbors: вывод команды одной строкой (не имя файла)
     :return: словарь, который описывает соединения между устройствами
     '''
+    neighbor_dict = {}
+
+    regex = (
+        '(?P<dev>\S+)>.*'
+        '|(?P<neighbor>\S+) +(?P<lintf>\S+ [\d+/]+).*?(?P<rintf>\S+ [\d+/]+).*')
+
+    for match in re.finditer(regex,sh_cdp_neighbors):
+        if match.lastgroup == 'dev':
+            device = match.group(match.lastgroup)
+            neighbor_dict[device] = {}
+        else:
+            neighbor, lintf, rintf = match.group('neighbor', 'lintf', 'rintf')
+            neighbor_dict[device][lintf] = {neighbor: rintf}
+    return neighbor_dict
 
 if __name__ == '__main__':
     with open(r'sh_cdp_n_sw1.txt', 'r') as file:
-        parse_sh_cdp_neighbors(file.read())
+        for key,value in parse_sh_cdp_neighbors(file.read()).items():
+            print(f'Device: {key}')
+            for i,j in value.items():
+                print(f'\tLocal Interface: {i} -> Device: {list(j.keys())[0]} Interface {list(j.values())[0]} ')
