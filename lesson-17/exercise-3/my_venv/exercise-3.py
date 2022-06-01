@@ -43,4 +43,4 @@ if __name__ == '__main__':
         for key,value in parse_sh_cdp_neighbors(file.read()).items():
             print(f'Device: {key}')
             for i,j in value.items():
-                print(f'\tLocal Interface: {i} -> Device: {list(j.keys())[0]} Interface {list(j.values())[0]} ')
+                print(f'\tLocal Interface: {i} -> Device: {list(j.keys())[0]} Interface: {list(j.values())[0]} ')
