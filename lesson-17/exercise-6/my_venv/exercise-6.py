@@ -39,17 +39,18 @@ def convert_datetime_to_str(datetime_obj):
 import csv
 import datetime
 
+
 def convert_str_to_datetime(datetime_str):
     """
         Конвертирует строку с датой в формате 11/10/2019 14:05 в объект datetime.
     """
-    return datetime.datetime.strptime(datetime_str, "%d/%m/%Y %H:%M")
+    return datetime.datetime.strptime(datetime_str, "%d.%m.%Y %H:%M")
 
 def convert_datetime_to_str(datetime_obj):
     """
         Конвертирует строку с датой в формате 11/10/2019 14:05 в объект datetime.
     """
-    return datetime.datetime.strftime(datetime_obj, "%d/%m/%Y %H:%M")
+    return datetime.datetime.strftime(datetime_obj, "%d.%m.%Y %H:%M")
 
 
 def write_last_log_to_csv(source_log,output):
@@ -60,7 +61,18 @@ def write_last_log_to_csv(source_log,output):
     :param output: имя файла в формате csv, в который будет записан результат
     :return: ничего не возвращает
     '''
+    choose_data = dict()
+    with open(source_log, 'r', encoding='utf-8') as file_in, open(output, 'w+', encoding='utf-8', newline='') as file_out:
+        header,*data = list(csv.reader(file_in))
+        sort_data = sorted(data, key=lambda x: convert_str_to_datetime(x[0].split(';')[2]))
+        for userdata in sort_data:
+            name,mail,date = userdata[0].split(';')
+            choose_data[mail] = (name,mail,date)
+        writer = csv.writer(file_out, delimiter=';')
+        writer.writerow(header[0].split(';'))
+        writer.writerows(choose_data.values())
 
 
 if __name__ == '__main__':
     write_last_log_to_csv('mail_log.csv','{:%H_%M_%S.csv}'.format(datetime.datetime.now()))
+#
