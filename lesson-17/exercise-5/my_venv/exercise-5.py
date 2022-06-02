@@ -26,6 +26,7 @@ YAML файла, преобразовать их соответственно, �
 
 import yaml
 import graphviz
+from draw_network_graph import draw_topology
 
 def transform_topology(topology):
     '''
@@ -34,6 +35,16 @@ def transform_topology(topology):
     :param topology: имя файла в формате YAML, в котором хранится топология
     :return: словарь
     '''
+    neighbor_dict = {}
+    with open(topology, 'r') as file:
+        data = yaml.safe_load(file)
+    for dev,lintf in data.items():
+        for intf,neighbor in lintf.items():
+            if not (dev,intf) in neighbor_dict.values():
+                neighbor_dict[(dev,intf)] = tuple(neighbor.items())[0]
+            else:
+                continue
+    return neighbor_dict
 
 if __name__ == '__main__':
-    transform_topology('topology.yml')
+    draw_topology(transform_topology('topology.yml'))
