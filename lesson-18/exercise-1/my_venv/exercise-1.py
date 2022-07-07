@@ -12,6 +12,8 @@ devices.yaml с помощью функции send_show_command (эта част
 '''
 
 import yaml
+from netmiko import ConnectHandler
+
 
 def send_show_command(dev,command):
     '''
@@ -20,7 +22,12 @@ def send_show_command(dev,command):
     :param command: команда, которую надо выполнить
     :return: возвращает строку с выводом команды.
     '''
-    pass
+    try:
+        with ConnectHandler(**dev) as ssh:
+            ssh.enable()
+            return ssh.send_command(command)
+    except:
+        print('Произошла ошибка...')
 
 
 if __name__ == "__main__":
@@ -28,4 +35,5 @@ if __name__ == "__main__":
     with open("devices.yaml") as f:
         devices = yaml.safe_load(f)
         for dev in devices:
-            print(send_show_command(dev, command))
+            print(f'{send_show_command(dev, command)}\n'
+                  f'{"-" * 80}')
