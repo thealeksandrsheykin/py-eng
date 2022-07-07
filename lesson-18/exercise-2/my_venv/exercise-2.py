@@ -9,7 +9,7 @@
 '''
 
 import yaml
-from netmiko import ConnectHandler
+from netmiko import ConnectHandler,exceptions
 
 
 def send_show_command(dev,command):
@@ -23,8 +23,8 @@ def send_show_command(dev,command):
         with ConnectHandler(**dev) as ssh:
             ssh.enable()
             return ssh.send_command(command)
-    except:
-        print('Произошла ошибка...')
+    except exceptions.NetmikoAuthenticationException as error:
+        print(f'{error}')
 
 
 if __name__ == "__main__":
