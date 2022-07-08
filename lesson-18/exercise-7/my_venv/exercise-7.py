@@ -38,10 +38,12 @@ def send_config_commands(device,commands,log=False):
             for command in commands:
                 result = ssh.send_config_set(command,exit_config_mode=False)
                 match = re.search(regex,result)
-
                 if match:
                     command_fail[command] = match.group("error")
                     print(f'Команда "{command}" выполнилась с ошибкой "{match.group("error")}" на устройстве: {ssh.host}')
+                    flag = input('Продолжать выполнять команды? [y]/n:')
+                    if flag in ('n','no'):
+                        break
                 else:
                     command_done[command] = result
             ssh.exit_config_mode()
