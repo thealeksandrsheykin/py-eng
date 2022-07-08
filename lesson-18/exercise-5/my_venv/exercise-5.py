@@ -15,7 +15,7 @@ import yaml
 from netmiko import ConnectHandler
 from netmiko.exceptions import AuthenticationException,SSHException
 
-def send_config_commands(device,config_commands):
+def send_config_commands(device,config_commands,log=False):
     '''
     Функция подключается по SSH (с помощью netmiko) к одному устройству и выполняет перечень команд в конфигурационном режиме
     на основании переданных аргументов.
@@ -24,6 +24,7 @@ def send_config_commands(device,config_commands):
     :return: возвращает строку с результатами выполнения команды
     '''
     try:
+        if log: print(f'Подключаюсь к {device["host"]}...\n')
         with ConnectHandler(**device) as ssh:
             ssh.enable()
             return ssh.send_config_set(commands)
@@ -36,5 +37,5 @@ if __name__ == '__main__':
     with open('devices.yaml','r') as file:
         devices = yaml.safe_load(file)
         for device in devices:
-            print(f'{send_config_commands(device,commands)}\n'
+            print(f'{send_config_commands(device,commands,True)}\n'
                   f'{"-" * 80}')
