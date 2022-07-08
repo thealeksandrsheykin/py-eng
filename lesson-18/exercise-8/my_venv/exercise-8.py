@@ -25,7 +25,10 @@ import yaml
 from netmiko.exceptions import SSHException,AuthenticationException
 from netmiko import ConnectHandler
 
-def send_commands(device,show=None,config=None):
+from exercise_1 import send_show_command
+from exercise_4 import send_config_commands
+
+def send_commands(device,*,show=None,config=None):
     '''
     Функция возвращает строку с результатами выполнения команд или команды.
     :param device: словарь с параметрами подключения к одному устройству
@@ -33,11 +36,27 @@ def send_commands(device,show=None,config=None):
     :param config: список с командами, которые надо выполнить в конфигурационном режиме
     :return: возвращает строку с результатами выполнения команд или команды
     '''
-    print(device,show)
+
+    if show and config:
+        raise ValueError('Функция принимает только один из аргументов "show" или "config"...')
+    elif show:
+        return send_show_command(device,show)
+    elif config:
+        return send_config_commands(device,config)
+    else:
+        raise ValueError('Функция должна принимать одно из значений "show" или "config"...')
 
 if __name__ == '__main__':
     commands = ['logging 10.255.255.1', 'logging buffered 20010', 'no logging console']
     command = 'sh ip int br'
     with open('devices.yaml', 'r') as file:
         devices = yaml.safe_load(file)
-    send_commands(devices[0],0)
+    print(f'Устройство: {devices[0]["host"]}\n'
+          f'Команда: "{command}"\n'
+          f'Вывод:\n'
+          f'{send_commands(devices[0], show=command)}\n'
+          f'{"-" * 80}\n'
+          f'Устройство: {devices[1]["host"]}\n'
+          f'Список команд: {commands}\n'
+          f'Вывод:\n'
+          f'{send_commands(devices[0],config=commands)}\n')
