@@ -43,6 +43,7 @@ def send_config_commands(device,config_commands):
     try:
         with ConnectHandler(**device) as ssh:
             ssh.enable()
+            return ssh.send_config_set(commands)
     except (AuthenticationException,SSHException) as error:
         print(f'{error}')
 
@@ -52,5 +53,6 @@ if __name__ == '__main__':
     with open('devices.yaml','r') as file:
         devices = yaml.safe_load(file)
         for device in devices:
-            print(f'{send_config_commands(device,commands)}')
+            print(f'{send_config_commands(device,commands)}\n'
+                  f'{"-" * 80}')
 
