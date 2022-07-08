@@ -10,7 +10,9 @@ IP-адрес устройства недоступен. При возникно
 
 
 import yaml
-from netmiko import ConnectHandler,exceptions
+#from netmiko import ConnectHandler,exceptions
+from netmiko import ConnectHandler
+from netmiko.exceptions import SSHException,AuthenticationException
 
 
 def send_show_command(dev,command):
@@ -24,7 +26,8 @@ def send_show_command(dev,command):
         with ConnectHandler(**dev) as ssh:
             ssh.enable()
             return ssh.send_command(command)
-    except exceptions.NetmikoAuthenticationException as error:
+    #except (exceptions.NetmikoAuthenticationException, exceptions.NetmikoTimeoutException) as error:
+    except (SSHException, AuthenticationException) as error:
         print(f'{error}')
 
 
