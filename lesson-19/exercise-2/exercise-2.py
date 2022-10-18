@@ -34,6 +34,7 @@ Ethernet0/1     unassigned      YES     NVRAM   administratively down down
 """
 
 import yaml
+from itertools import repeat
 from concurrent.futures import ThreadPoolExecutor
 from netmiko import (ConnectHandler, NetmikoTimeoutException, NetmikoBaseException, NetMikoAuthenticationException)
 
@@ -43,7 +44,7 @@ def send_command(device: dict, command: str) -> str:
     The function connection to device and sending a command to it.
     :param device: dict with parameters of device
     :param command: command string
-    :return:
+    :return: output string
     """
     try:
         with ConnectHandler(**device) as ssh:
@@ -54,7 +55,7 @@ def send_command(device: dict, command: str) -> str:
         print(error)
 
 
-def send_show_command_to_devices(devises: list, command: str, filename: str = 'result.txt', limit: int = 3) -> any:
+def send_show_command_to_devices(devices: list, command: str, filename: str = 'result.txt', limit: int = 3) -> any:
     """
     The function parallel sent one command to different devices adn write result to text file.
     :param devises: list of dict with parameters connection to devices
@@ -63,6 +64,12 @@ def send_show_command_to_devices(devises: list, command: str, filename: str = 'r
     :param limit: max amount thread
     :return: None
     """
+    with ThreadPoolExecutor(max_workers=limit) as executor, open(filename, 'w+') as file:
+        result = executor.map(send_command, devices, repeat(command))
+        for device, output_command in zip(devices, result):
+            file.write(f'{device["host"]}#{command}\n')
+            file.write(output_command)
+            file.write(f'\n------------------------\n')
 
 
 if __name__ == '__main__':
