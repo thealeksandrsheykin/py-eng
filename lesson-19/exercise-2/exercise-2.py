@@ -38,6 +38,22 @@ from concurrent.futures import ThreadPoolExecutor
 from netmiko import (ConnectHandler, NetmikoTimeoutException, NetmikoBaseException, NetMikoAuthenticationException)
 
 
+def send_command(device: dict, command: str) -> str:
+    """
+    The function connection to device and sending a command to it.
+    :param device: dict with parameters of device
+    :param command: command string
+    :return:
+    """
+    try:
+        with ConnectHandler(**device) as ssh:
+            ssh.enable()
+            return ssh.send_command(command)
+
+    except (NetMikoAuthenticationException, NetmikoBaseException, NetmikoTimeoutException) as error:
+        print(error)
+
+
 def send_show_command_to_devices(devises: list, command: str, filename: str = 'result.txt', limit: int = 3) -> any:
     """
     The function parallel sent one command to different devices adn write result to text file.
@@ -47,7 +63,6 @@ def send_show_command_to_devices(devises: list, command: str, filename: str = 'r
     :param limit: max amount thread
     :return: None
     """
-    ...
 
 
 if __name__ == '__main__':
