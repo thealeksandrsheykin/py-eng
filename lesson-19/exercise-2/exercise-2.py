@@ -33,6 +33,7 @@ Ethernet0/1     unassigned      YES     NVRAM   administratively down down
 
 """
 
+
 import yaml
 from itertools import repeat
 from concurrent.futures import ThreadPoolExecutor
