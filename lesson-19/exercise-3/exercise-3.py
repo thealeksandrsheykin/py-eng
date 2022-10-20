@@ -67,16 +67,20 @@ def send_command_to_device(devices: list, commands_dict: dict, filename: str = '
     :param limit: number of parallel thread
     :return: None
     """
-    with ThreadPoolExecutor(max_workers=limit) as executor:
+    with ThreadPoolExecutor(max_workers=limit) as executor, open(filename, 'w+') as file:
         for device in devices:
+
             output = executor.submit(send_command, device, commands_dict[device['host']])
+            file.write(f'\n-------------------------------------------------\n')
+            file.write(f'\n{device["host"]}#{commands_dict[device["host"]]}\n')
+            file.write(f'{output.result()}\n')
 
 
 if __name__ == '__main__':
     commands = {
-        "172.16.5.32": "sh run | s ^router ospf",
-        "172.16.5.36": "sh ip int br",
-        "172.16.5.40": "sh int desc",
+        "192.168.1.1": "sh run | s ^router ospf",
+        "192.168.1.2": "sh ip int br",
+        "192.168.1.3": "sh int desc",
     }
     with open('devices.yaml', 'r') as file:
         devices = yaml.safe_load(file)
