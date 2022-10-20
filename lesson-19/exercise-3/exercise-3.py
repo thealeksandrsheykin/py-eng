@@ -38,11 +38,28 @@ commands = {
 """
 
 import yaml
+from concurrent.futures import ThreadPoolExecutor
+from netmiko import (ConnectHandler, NetmikoBaseException, NetmikoTimeoutException, NetMikoAuthenticationException)
+
+
+def send_command(device: dict, command: str) -> str:
+    """
+    The function connection to device and sending a command to it.
+    :param device: dict with parameters of device
+    :param command: command string
+    :return: output string
+    """
+    try:
+        with ConnectHandler(**device) as ssh:
+            ssh.enable()
+    except (NetmikoBaseException, NetmikoTimeoutException, NetMikoAuthenticationException) as error:
+        print(error)
 
 
 def send_command_to_device(devices: list, commands_dict: dict, filename: str = 'result.txt', limit: int = 3) -> None:
     """
-    The function to send different "Show" commands to different devices in parallel streams and then write the output to a file.
+    The function to send different "Show" commands to different devices in parallel streams and then write the output
+    to a file.
     :param devices: list of devices with parameters of connection to them
     :param commands_dict: dict with information about which device to send which command
     :param filename: filename to write the result
@@ -54,9 +71,9 @@ def send_command_to_device(devices: list, commands_dict: dict, filename: str = '
 
 if __name__ == '__main__':
     commands = {
-        "192.168.100.3": "sh run | s ^router ospf",
-        "192.168.100.1": "sh ip int br",
-        "192.168.100.2": "sh int desc",
+        "172.16.5.32": "sh run | s ^router ospf",
+        "172.16.5.36": "sh ip int br",
+        "172.16.5.40": "sh int desc",
     }
     with open('devices.yaml', 'r') as file:
         devices = yaml.safe_load(file)
