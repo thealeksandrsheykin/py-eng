@@ -52,6 +52,7 @@ def send_command(device: dict, command: str) -> str:
     try:
         with ConnectHandler(**device) as ssh:
             ssh.enable()
+            return ssh.send_command(command)
     except (NetmikoBaseException, NetmikoTimeoutException, NetMikoAuthenticationException) as error:
         print(error)
 
@@ -66,7 +67,9 @@ def send_command_to_device(devices: list, commands_dict: dict, filename: str = '
     :param limit: number of parallel thread
     :return: None
     """
-    ...
+    with ThreadPoolExecutor(max_workers=limit) as executor:
+        for device in devices:
+            output = executor.submit(send_command, device, commands_dict[device['host']])
 
 
 if __name__ == '__main__':
