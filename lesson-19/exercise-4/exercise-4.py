@@ -52,6 +52,7 @@ commands = {
 """
 
 import yaml
+from concurrent.futures import ThreadPoolExecutor
 from netmiko import (ConnectHandler, NetmikoBaseException, NetmikoTimeoutException, NetMikoAuthenticationException)
 
 
@@ -85,7 +86,10 @@ def send_command_to_devices(devices: dict, commands_dict: dict, filename: str = 
     :param limit: number of parallel thread
     :return: None
     """
-    ...
+    with ThreadPoolExecutor(max_workers=limit) as executor, open(filename, 'w+') as file:
+        for device in devices:
+            output = executor.submit(send_command, device, commands_dict[device['host']])
+            file.write(f'{output.result()}')
 
 
 if __name__ == '__main__':
