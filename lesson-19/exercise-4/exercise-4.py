@@ -52,6 +52,27 @@ commands = {
 """
 
 import yaml
+from netmiko import (ConnectHandler, NetmikoBaseException, NetmikoTimeoutException, NetMikoAuthenticationException)
+
+
+def send_command(device: dict, commands: list) -> str:
+    """
+    The function connection to device and sending a command to it.
+    :param device: dict with parameters of device
+    :param commands: list of commands
+    :return: output string
+    """
+    result = ''
+    try:
+        with ConnectHandler(**device) as ssh:
+            ssh.enable()
+            for command in commands:
+                result += f'\n------------------------\n'
+                result += f'{device["host"]}#{command}\n'
+                result += ssh.send_command(command)
+            return result
+    except (NetmikoBaseException, NetmikoTimeoutException, NetMikoAuthenticationException) as error:
+        print(error)
 
 
 def send_command_to_devices(devices: dict, commands_dict: dict, filename: str = 'result.txt', limit: int = 3) -> None:
@@ -69,9 +90,9 @@ def send_command_to_devices(devices: dict, commands_dict: dict, filename: str = 
 
 if __name__ == '__main__':
     commands = {
-        "192.168.100.3": ["sh ip int br", "sh ip route | ex -"],
-        "192.168.100.1": ["sh ip int br", "sh int desc"],
-        "192.168.100.2": ["sh int desc"],
+        "172.16.5.32": ["sh ip int br", "sh ip route | ex -"],
+        "172.16.5.36": ["sh ip int br", "sh int desc"],
+        "172.16.5.40": ["sh int desc"],
     }
     with open(r'devices.yaml', 'r') as file:
         devices = yaml.safe_load(file)
