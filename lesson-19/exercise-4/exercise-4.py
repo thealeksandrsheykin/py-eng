@@ -101,3 +101,5 @@ if __name__ == '__main__':
     with open(r'devices.yaml', 'r') as file:
         devices = yaml.safe_load(file)
     send_command_to_devices(devices, commands)
+
+
