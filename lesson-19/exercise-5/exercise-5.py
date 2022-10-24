@@ -33,6 +33,7 @@ Ethernet0/0		192.168.100.3	YES 	NVRAM		up						up
 Ethernet0/1		unassigned		YES 	NVRAM		administratively down 	down
 """
 import yaml
+from concurrent.futures import ThreadPoolExecutor
 from netmiko import (ConnectHandler, NetmikoBaseException, NetmikoTimeoutException, NetMikoAuthenticationException)
 
 
@@ -84,10 +85,17 @@ def send_commands_to_devices(devices: dict,
     :param limit: number of parallel thread
     :return: None
     """
-    ...
+    if show and config:
+        raise ValueError('Only one of the show/config arguments can be passed')
+    command = show if show else config
+    function = send_show_command if show else send_commands
+    with ThreadPoolExecutor(max_workers=limit) as executor, open(filename, 'w+') as file:
+        for device in devices:
+            output = executor.submit(function, device, command)
+            file.write(f'{output.result()}')
 
 
 if __name__ == '__main__':
     with open(r'devices.yaml', 'r') as file:
         devices = yaml.safe_load(file)
-    print(send_commands(devices[0], ['logging host 172.16.1.6 discriminator SMART-LI']))
+    send_commands_to_devices(devices, show='show clock')
