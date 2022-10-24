@@ -33,17 +33,32 @@ Ethernet0/0		192.168.100.3	YES 	NVRAM		up						up
 Ethernet0/1		unassigned		YES 	NVRAM		administratively down 	down
 """
 import yaml
+from netmiko import (ConnectHandler, NetmikoBaseException, NetmikoTimeoutException, NetMikoAuthenticationException)
 
+
+def send_show_command(device: dict, command: str) -> str:
+    """
+    The function to connection to device and sending a commands type of "show" to it.
+    :param device: dict with parameters of device
+    :param command: command string
+    :return: output string
+    """
+    try:
+        with ConnectHandler(**device) as ssh:
+            ssh.enable()
+            return ssh.send_command(command)
+    except (NetMikoAuthenticationException, NetmikoBaseException, NetmikoTimeoutException) as error:
+        print(error)
 
 def send_commands_to_devices(devices: dict,
-                             filename: str = 'result.txt',
+                             *,
                              show: str = None,
                              config: list = None,
+                             filename: str = 'result.txt',
                              limit: int = 3):
     """
     The function to send different "show" commands or "config" to different devices in parallel streams and then write
-    the output
-    to a file.
+    the output to a file.
     :param devices: list of devices with parameters of connection to them
     :param show: command string (default None)
     :param config: list of commands (default None)
@@ -53,8 +68,6 @@ def send_commands_to_devices(devices: dict,
     """
     ...
 
-
 if __name__ == '__main__':
     with open(r'devices.yaml', 'r') as file:
         devices = yaml.safe_load(file)
-    send_commands_to_devices(devices)
