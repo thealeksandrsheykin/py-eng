@@ -52,6 +52,22 @@ def send_show_command(device: dict, command: str) -> str:
     except (NetMikoAuthenticationException, NetmikoBaseException, NetmikoTimeoutException) as error:
         print(error)
 
+
+def send_commands(device: dict, commands: list) -> str:
+    """
+    The function to connection to device and sending a commands type of "config" to it.
+    :param device: dict with parameters of device
+    :param commands: list of command
+    :return: output string
+    """
+    try:
+        with ConnectHandler(**device) as ssh:
+            ssh.enable()
+            return ssh.send_config_set(commands)
+    except (NetMikoAuthenticationException, NetmikoBaseException, NetmikoTimeoutException) as error:
+        print(error)
+
+
 def send_commands_to_devices(devices: dict,
                              *,
                              show: str = None,
@@ -70,7 +86,8 @@ def send_commands_to_devices(devices: dict,
     """
     ...
 
+
 if __name__ == '__main__':
     with open(r'devices.yaml', 'r') as file:
         devices = yaml.safe_load(file)
-    print(send_show_command(devices[0], 'show clock'))
+    print(send_commands(devices[0], ['logging host 172.16.1.6 discriminator SMART-LI']))
