@@ -46,7 +46,9 @@ def send_show_command(device: dict, command: str) -> str:
     try:
         with ConnectHandler(**device) as ssh:
             ssh.enable()
-            return ssh.send_command(command)
+            prompt = ssh.find_prompt()
+            output = ssh.send_command(command)
+        return f'{prompt}#{command}\n{output}\n'
     except (NetMikoAuthenticationException, NetmikoBaseException, NetmikoTimeoutException) as error:
         print(error)
 
@@ -71,3 +73,4 @@ def send_commands_to_devices(devices: dict,
 if __name__ == '__main__':
     with open(r'devices.yaml', 'r') as file:
         devices = yaml.safe_load(file)
+    print(send_show_command(devices[0], 'show clock'))
