@@ -21,6 +21,7 @@ def generate_config(template: str, data_dict: dict) -> str:
     :param data_dict: dictionary with values to be substituded into the template
     :return: string with configuration
     """
+    print(template)
     dirname, filename = os.path.split(template)
     env = Environment(loader=FileSystemLoader(dirname), trim_blocks=True, lstrip_blocks=True)
     return (env.get_template(filename)).render(data_dict)

@@ -16,19 +16,24 @@ generate_config из задания 1. Не копируйте код функц
 import os
 import yaml
 from exercise01 import generate_config
-from jinja2 import FileSystemLoader, Environment
 
 
-def merge_templates(templates: list, file: str) -> None:
+def merge_templates(templates: list, template_file: str) -> None:
     """
     This function merge templates into one.
     :param templates: list of template names
-    :param file: resulting filename
+    :param template_file: resulting filename
     :return: None
     """
-    ...
+    with open(template_file, 'w') as f:
+        for template in templates:
+            f.write("{{% include '{0}' %}}\n".format(template))
 
 
 if __name__ == '__main__':
-    templates = os.listdir('templates')
-    merge_templates(templates, 'cisco_router_base.txt')
+    data_file = "data_files/router_info.yml"
+    template_file = "templates/cisco_router_base.txt"
+    merge_templates(os.listdir('templates'), template_file)
+    with open(data_file) as f:
+        data = yaml.safe_load(f)
+    print(generate_config(template_file, data))
