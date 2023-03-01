@@ -1,0 +1,21 @@
+
+vlan {{vlan_id}}
+ name {{name}}
+
+{% for interface in access %}
+interface {{ interface }}
+ description Ready for Use
+ switchport mode access
+ switchport mode nonegotiate
+ switchport accecc vlan {{vlan_id}}
+ no cdp enable
+ no vtp
+ shutdown
+ spanning-tree portfast
+{% endfor %}
+
+{% for interface in trunk %}
+interface {{ interface }}
+ switchport trunk allowed vlan add {{vlan_id}}
+{% endfor %}
+
