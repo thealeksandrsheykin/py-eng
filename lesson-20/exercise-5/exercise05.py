@@ -22,8 +22,9 @@ data = {
     'tun_ip_2': '10.0.1.2 255.255.255.252'
 }
 """
-
+import os
 from jinja2 import Environment, FileSystemLoader
+
 
 def create_vpn_config(template1: str, template2: str, data_dict: dict) -> tuple:
     """
@@ -33,7 +34,12 @@ def create_vpn_config(template1: str, template2: str, data_dict: dict) -> tuple:
     :param data_dict: dictionary with values to replace in the template
     :return: tuple with two configuration (string)
     """
-    ...
+    result = list()
+    for template in (template1, template2):
+        dirname, filename = os.path.split(template)
+        env = Environment(loader=FileSystemLoader(dirname), trim_blocks=True, lstrip_blocks=True)
+        result.append((env.get_template(filename)).render(data_dict))
+    return tuple(result)
 
 
 if __name__ == '__main__':
@@ -46,4 +52,7 @@ if __name__ == '__main__':
         'tun_ip_1': '10.0.1.1 255.255.255.252',
         'tun_ip_2': '10.0.1.2 255.255.255.252'
     }
-    create_vpn_config(template_file01, template_file02, data)
+    result_vpn01, result_vpn02 = create_vpn_config(template_file01, template_file02, data)
+    print(result_vpn01)
+    print(result_vpn02)
+
