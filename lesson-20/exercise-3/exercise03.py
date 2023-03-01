@@ -26,6 +26,9 @@
 generate_config из задания 1. Не копируйте код функции generate_config.
 """
 
+from exercise01 import generate_config
+import yaml
+
 
 def create_template_ospf(template: str) -> None:
     """
@@ -33,7 +36,30 @@ def create_template_ospf(template: str) -> None:
     :param template: the path where you want to save the template
     :return: None
     """
+    ospf = """
+router ospf {{ process }}
+ router-id {{ router_id }}
+ auto-cost reference-bandwidth {{ref_bw}}
+ {% for networks in ospf_intf %}
+ network {{networks.ip}} 0 0.0.0.0 area {{networks.area}}
+ {% if networks.passive %}
+ passive-interface {{networks.name}}
+ {% endif %}
+ {% endfor %} 
+ 
+{% for interface in ospf_intf if not interface.passive %}
+interface {{interface.name}}
+ ip ospf hello-interval 1
+{% endfor %}
+ """
+    with open(template, 'w') as f:
+        f.write(ospf)
 
 
 if __name__ == '__main__':
+    data_file = "data_files/ospf.yml"
+    template_file = "templates/ospf.txt"
     create_template_ospf('templates/ospf.txt')
+    with open(data_file) as f:
+        data = yaml.safe_load(f)
+    print(generate_config(template_file, data))
