@@ -18,9 +18,27 @@
 тизаторе dest такие: Tunnel2, Tunnel3, Tunnel8. Первый свободный номер одинаковый для двух маршрутизаторов будет 5. И на
 до будет настроить интерфейс Tunnel 5.
 """
-import yaml
+import yaml, re
 from exercise05 import create_vpn_config
 from netmiko import ConnectHandler
+
+
+def get_free_number_tunnel_interface(src_int_tunnel: str, dst_int_tunnel: str) -> int:
+    """
+    The function determines the free interface number on both devices
+    :param src_int_tunnel: tunnel interfaces on src device
+    :param dst_int_tunnel: tunnel interfaces on dst device
+    :return: free number tunnel interface
+    """
+    regex = r'Tunnel(\d+)'
+    numbers = [int(i) for i in re.findall(regex, f'{src_int_tunnel}\n{dst_int_tunnel}')]
+    if not numbers:
+        return 0
+    diff = set(range(min(numbers), max(numbers) + 1)) - set(numbers)
+    if not diff:
+        return max(numbers) + 1
+    else:
+        return min(diff)
 
 
 def configure_vpn(src_device_params: dict, dst_device_params: dict, src_template: str, dst_template: str,
@@ -34,10 +52,16 @@ def configure_vpn(src_device_params: dict, dst_device_params: dict, src_template
     :param vpn_data_dict: dictionary with values to replace in the template
     :return: None
     """
-    src_config_vpn, dst_config_vpn = create_vpn_config(src_template, dst_template, vpn_data_dict)
+
     with ConnectHandler(**src_device_params) as src_device, ConnectHandler(**dst_device_params) as dst_device:
         src_device.enable()
         dst_device.enable()
+        src_int_tunnel = src_device.send_command('show running-config | include interface Tunnel')
+        dst_int_tunnel = dst_device.send_command('show running-config | include interface Tunnel')
+        tunnel_int_number = get_free_number_tunnel_interface(src_int_tunnel, dst_int_tunnel)
+        vpn_data_dict['tun_num'] = tunnel_int_number
+        src_config_vpn, dst_config_vpn = create_vpn_config(src_template, dst_template, vpn_data_dict)
+        return src_device.send_config_set(src_config_vpn.split('\n')), dst_device.send_config_set(dst_config_vpn.split('\n'))
 
 
 if __name__ == '__main__':
@@ -52,4 +76,4 @@ if __name__ == '__main__':
     }
     with open('devices.yaml') as f:
         src_device, dst_device = yaml.safe_load(f)
-    configure_vpn(src_device, dst_device, src_template, dst_template, data)
+    print(configure_vpn(src_device, dst_device, src_template, dst_template, data))
