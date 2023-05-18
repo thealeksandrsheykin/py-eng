@@ -13,7 +13,7 @@
 Проверить работу функции на выводе команды output/sh_ip_int_br.txt и шаблоне templates/sh_ip_int_br.template.
 
 
-{python} {
+```python
 from netmiko import ConnectHandler
 # вызов функции должен выглядеть так
 if __name__ == "__main__":
@@ -28,4 +28,5 @@ if __name__ == "__main__":
 		r1.enable()
 		output = r1.send_command("sh ip int br")
 	result = parse_command_output("templates/sh_ip_int_br.template", output)
-	print(result)
+	print(result)}
+```
