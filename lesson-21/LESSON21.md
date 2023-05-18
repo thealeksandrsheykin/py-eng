@@ -9,6 +9,7 @@
 Функция должна возвращать список:
 * первый элемент - это список с названиями столбцов
 * остальные элементы это списки, в котором находятся результаты обработки вывода
+
 Проверить работу функции на выводе команды output/sh_ip_int_br.txt и шаблоне templates/sh_ip_int_br.template.
 
 
@@ -27,5 +28,4 @@ if __name__ == "__main__":
 		r1.enable()
 		output = r1.send_command("sh ip int br")
 	result = parse_command_output("templates/sh_ip_int_br.template", output)
-	print(result)
-}```
+	print(result)}```
