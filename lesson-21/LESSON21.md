@@ -30,3 +30,16 @@ if __name__ == "__main__":
 	result = parse_command_output("templates/sh_ip_int_br.template", output)
 	print(result)
 ```
+
+## Задание №2
+
+Создать функцию parse_output_to_dict.
+Параметры функции:
+* template - имя файла, в котором находится шаблон TextFSM (templates/sh_ip_int_br.template)
+* command_output - вывод соответствующей команды show (строка)
+
+Функция должна возвращать список словарей:
+* ключи - имена переменных в шаблоне TextFSM
+* значения - части вывода, которые соответствуют переменным
+
+Проверить работу функции на выводе команды output/sh_ip_int_br.txt и шаблоне templates/sh_ip_int_br.template.
