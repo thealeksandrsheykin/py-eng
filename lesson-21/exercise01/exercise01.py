@@ -18,7 +18,7 @@ def parse_command_output(template: str, command_output: str) -> list:
     with open(template) as f_template:
         fsm = textfsm.TextFSM(f_template)
         header = fsm.header
-        res = fsm.ParseText(output)
+        res = fsm.ParseText(command_output)
     return [header] + res
 
 
