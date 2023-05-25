@@ -53,4 +53,5 @@ if __name__ == "__main__":
 * ip - такого вида 10.1.10.6
 * vlan - 10
 * intf - FastEthernet0/10
+
 Проверить работу шаблона с помощью функции parse_command_output из задания 1.
