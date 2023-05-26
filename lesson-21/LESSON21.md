@@ -102,21 +102,21 @@ if __name__ == "__main__":
 Пример словаря:
 ```json
 {'192.168.100.1': [{'address': '192.168.100.1',
-'intf': 'Ethernet0/0',
-'protocol': 'up',
-'status': 'up'},
-{'address': '192.168.200.1',
-'intf': 'Ethernet0/1',
-'protocol': 'up',
-'status': 'up'}],
-'192.168.100.2': [{'address': '192.168.100.2',
-'intf': 'Ethernet0/0',
-'protocol': 'up',
-'status': 'up'},
-{'address': '10.100.23.2',
-'intf': 'Ethernet0/1',
-'protocol': 'up',
-'status': 'up'}]}
+					'intf': 'Ethernet0/0',
+					'protocol': 'up',
+					'status': 'up'},
+				   {'address': '192.168.200.1',
+					'intf': 'Ethernet0/1',
+					'protocol': 'up',
+					'status': 'up'}],
+'192.168.100.2':  [{'address': '192.168.100.2',
+					'intf': 'Ethernet0/0',
+					'protocol': 'up',
+					'status': 'up'},
+				   {'address': '10.100.23.2',
+					'intf': 'Ethernet0/1',
+					'protocol': 'up',
+					'status': 'up'}]}
 ```
 
 Проверить работу функции на примере вывода команды sh ip int br и устройствах из devices.yaml
