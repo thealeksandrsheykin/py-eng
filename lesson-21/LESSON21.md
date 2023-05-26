@@ -109,7 +109,7 @@ if __name__ == "__main__":
 		  'intf': 'Ethernet0/0',
 		  'protocol': 'up',
 		  'status': 'up'},
-    	 {'address': '192.168.200.1',
+         {'address': '192.168.200.1',
 		  'intf': 'Ethernet0/1',
 		  'protocol': 'up',
 		  'status': 'up'}
