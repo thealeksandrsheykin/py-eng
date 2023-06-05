@@ -38,3 +38,12 @@ topology_example = {('R1',  'Eth0/0'): ('SW1', 'Eth0/1' ),
 		    ('SW1', 'Eth0/2'): ('R2',  'Eth0/0' ),
 		    ('SW1', 'Eth0/3'): ('R3',  'Eth0/0' )}
 ```
+
+## Задание №2
+
+Скопировать класс Topology из задания № 1 и изменить его. Перенести функциональность удаления дублей в метод _normalize. При этом метод __init__ должен выглядеть таким образом:
+```python
+class Topology:
+	def __init__(self, topology_dict):
+		self.topology = self._normalize(topology_dict)
+```
