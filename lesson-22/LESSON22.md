@@ -162,3 +162,39 @@ In [11]: t.add_link(('R1', 'Eth0/4'), ('R7', 'Eth0/0'))
 In [12]: t.add_link(('R1', 'Eth0/4'), ('R7', 'Eth0/5'))
 Cоединение с одним из портов существует
 ```
+
+## Задание №6
+
+Создать класс CiscoTelnet, который подключается по Telnet к оборудованию Cisco. При создании экземпляра класса, должно создаваться подключение Telnet, а также переход в режим enable. 
+Класс должен использовать модуль telnetlib для подключения по Telnet. У класса CiscoTelnet, кроме `__init__`, должно быть, как минимум, два метода:
+1. _write_line - принимает как аргумент строку и отправляет на оборудование строку преобразованную в байты и добавляет перевод строки в конце. Метод _write_line должен использоваться внутри класса.
+2. send_show_command - принимает как аргумент команду show и возвращает вывод полученный с обрудования
+Параметры метода `__init__`:
+1. ip - IP-адрес
+2. username - имя пользователя
+3. password - пароль
+4. secret - пароль enable
+
+Пример создания экземпляра класса:
+```python
+In [2]: from task_22_2 import CiscoTelnet
+In [3]: r1_params = {
+	'ip': '192.168.100.1',
+	'username': 'cisco',
+	'password': 'cisco',
+	'secret':   'cisco'}	
+In [4]: r1 = CiscoTelnet(**r1_params)
+In [5]: r1.send_show_command('sh ip int br')
+Out[5]: R1#sh ip int br
+			 Interface        IP-Address   OK?  Method Status Protocol
+			Ethernet0/0     192.168.100.1  YES  NVRAM   up       up 
+			Ethernet0/1     192.168.200.1  YES  NVRAM   up       up 
+			Ethernet0/2     190.16.200.1   YES  NVRAM   up       up 
+			Ethernet0/3     192.168.130.1  YES  NVRAM   up       up
+			Ethernet0/3.100 10.100.0.1     YES  NVRAM   up       up 
+			Ethernet0/3.200 10.200.0.1     YES  NVRAM   up       up 
+			Ethernet0/3.300 10.30.0.1      YES  NVRAM   up       up
+			Loopback0       10.1.1.1       YES  NVRAM   up       up
+			Loopback55      5.5.5.5        YES  manual  up       up
+	   R1#
+```
