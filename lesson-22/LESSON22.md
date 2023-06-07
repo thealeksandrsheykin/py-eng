@@ -179,10 +179,10 @@ Cоединение с одним из портов существует
 ```python
 In [2]: from task_22_2 import CiscoTelnet
 In [3]: r1_params = {
-	'ip': '192.168.100.1',
-	'username': 'cisco',
-	'password': 'cisco',
-	'secret':   'cisco'}	
+	     'ip':       '192.168.100.1',
+	     'username': 'cisco',
+	     'password': 'cisco',
+	     'secret':   'cisco'}	
 In [4]: r1 = CiscoTelnet(**r1_params)
 In [5]: r1.send_show_command('sh ip int br')
 Out[5]: R1#sh ip int br
@@ -196,5 +196,5 @@ Out[5]: R1#sh ip int br
 			Ethernet0/3.300 10.30.0.1      YES  NVRAM   up       up
 			Loopback0       10.1.1.1       YES  NVRAM   up       up
 			Loopback55      5.5.5.5        YES  manual  up       up
-	   R1#
+	  R1#
 ```
