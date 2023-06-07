@@ -1,0 +1,4 @@
+- ip: 192.168.100.1
+  username: admin
+  password: cisco
+  secret: cisco
