@@ -241,3 +241,38 @@ Out[5]: sh ip int br
 		Ethernet0/0     192.168.100.1  YES   NVRAM   up       up 
 		Ethernet0/1     192.168.200.1  YES   NVRAM   up       up
 ```
+
+## Задание №9
+
+Скопировать класс CiscoTelnet из задания №8 и добавить метод send_config_commands. Метод send_config_commands должен 
+уметь отправлять одну команду конфигурационного режима или список команд. Метод должен возвращать вывод аналогичный 
+методу send_config_set у netmiko (пример вывода ниже).
+
+Пример создания экземпляра класса:
+```python
+In [1]: from task_22_2b import CiscoTelnet
+In [2]: r1_params = {
+    'ip': '192.168.100.1',
+    'username': 'admin',
+    'password': 'cisco',
+    'secret': 'cisco'}
+In [3]: r1 = CiscoTelnet(**r1_params)
+```
+
+Использование метода send_config_commands:
+
+```python
+In [5]: r1.send_config_commands('logging 10.1.1.1')
+Out[5]: conf t
+        Enter configuration commands, one per line. End with CNTL/Z.
+        R1(config)#logging 10.1.1.1
+        R1(config)#end
+        R1#
+In [6]: r1.send_config_commands(['interface loop55', 'ip address 5.5.5.5 255.255.255.255'])
+Out[6]: conf t
+        Enter configuration commands, one per line. End with CNTL/Z.
+        R1(config)#interface loop55
+        R1(config-if)#ip address 5.5.5.5 255.255.255.255
+        R1(config-if)#end
+        R1#
+```
