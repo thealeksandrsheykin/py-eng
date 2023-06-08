@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 # !/usr/bin/env python3
 
-import telnetlib, time
+import telnetlib
+
+import yaml, time
+from textfsm import clitable
+
 
 class CiscoTelnet:
     def __init__(self, ip: str, username: str, password: str, secret: str) -> None:
@@ -11,14 +15,14 @@ class CiscoTelnet:
         self.secret = secret
         self.telnet = telnetlib.Telnet(self.ip)
 
-        self.telnet.read_until(b'Username')
+        self.telnet.read_until(b'Username', timeout=5)
         self.telnet.write(self._write_line(self.username))
-        self.telnet.read_until(b'Password')
+        self.telnet.read_until(b'Password', timeout=5)
         self.telnet.write(self._write_line(self.password))
         flag, _, _ = self.telnet.expect([b'>', b'#'])
         if not flag:
             self.telnet.write(b'enable\n')
-            self.telnet.read_until(b'Password')
+            self.telnet.read_until(b'Password', timeout=5)
             self.telnet.write(self._write_line(self.secret))
             self.telnet.read_until(b'#', timeout=5)
         self.telnet.write(b'terminal length 0\n')
@@ -31,16 +35,23 @@ class CiscoTelnet:
     def send_show_command(self, command: str,
                           parse: bool = True,
                           templates: str = 'templates',
-                          index: str = 'index') -> str:
+                          index: str = 'index') -> any:
+
         self.telnet.write(self._write_line(command))
-        return self.telnet.read_until(b'#').decode('utf-8')
+        time.sleep(5)
+        output = self.telnet.read_until(b'#', timeout=5).decode('utf-8')
+        if parse:
+            cli_table = clitable.CliTable(index, templates)
+            cli_table.ParseCmd(output, {"Command": command, "Vendor": "cisco"})
+            return [dict(zip(cli_table.header, data)) for data in cli_table]
+        else:
+            return output
 
 
 if __name__ == '__main__':
-    sw1 = {
-        'ip': '192.168.100.1',
-        'username': 'admin',
-        'password': 'cisco',
-        'secret': 'cisco'}
-    device = CiscoTelnet(**sw1)
-    print(device.send_show_command('sh ip int br'))
+    with open('devices.yaml', 'r') as file:
+        devices = yaml.safe_load(file)
+        for device in devices:
+            result = CiscoTelnet(**device).send_show_command('sh int desc', parse=True)
+            print(result)
+
