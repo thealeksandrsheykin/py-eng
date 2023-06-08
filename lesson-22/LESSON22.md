@@ -260,7 +260,6 @@ In [3]: r1 = CiscoTelnet(**r1_params)
 ```
 
 Использование метода send_config_commands:
-
 ```python
 In [5]: r1.send_config_commands('logging 10.1.1.1')
 Out[5]: conf t
