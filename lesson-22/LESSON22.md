@@ -242,9 +242,9 @@ Out[5]: sh ip int br
 		Ethernet0/1     192.168.200.1  YES   NVRAM   up       up
 ```
 
-## Задание №9
+## Задание №8
 
-Скопировать класс CiscoTelnet из задания №8 и добавить метод send_config_commands. Метод send_config_commands должен 
+Скопировать класс CiscoTelnet из задания №7 и добавить метод send_config_commands. Метод send_config_commands должен 
 уметь отправлять одну команду конфигурационного режима или список команд. Метод должен возвращать вывод аналогичный 
 методу send_config_set у netmiko (пример вывода ниже).
 
