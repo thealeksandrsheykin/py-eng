@@ -50,10 +50,9 @@ class CiscoTelnet:
     def send_config_commands(self, commands: any) -> str:
         output = str()
         if isinstance(commands, str):
-            commands_res = ['conf t', commands, 'end']
-        else:
-            commands_res = f'conf t,{",".join(commands)},end'.split(',')
-        for command in commands_res:
+            commands = [commands]
+        commands = ['conf t', *commands, 'end']  # f'conf t,{",".join(commands)},end'.split(',')
+        for command in commands:
             self.telnet.write(self._write_line(command))
             output += f"{self.telnet.read_until(b'#', timeout=5).decode('utf-8')}\n"
         return output
@@ -63,5 +62,6 @@ if __name__ == '__main__':
     with open('devices.yaml', 'r') as file:
         devices = yaml.safe_load(file)
         for device in devices:
-            result = CiscoTelnet(**device).send_config_commands(['interface loop55', 'ip address 5.5.5.5 255.255.255.255'])
+            result = CiscoTelnet(**device).send_config_commands(
+                ['interface loop55', 'ip address 5.5.5.5 255.255.255.255'])
             print(result)
