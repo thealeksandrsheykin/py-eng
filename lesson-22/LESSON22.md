@@ -250,7 +250,7 @@ Out[5]: sh ip int br
 
 Пример создания экземпляра класса:
 ```python
-In [1]: from task_22_2b import CiscoTelnet
+In [1]: from exercise08 import CiscoTelnet
 In [2]: r1_params = {
     'ip': '192.168.100.1',
     'username': 'admin',
