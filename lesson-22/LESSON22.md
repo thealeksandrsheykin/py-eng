@@ -306,7 +306,7 @@ In [6]: commands = commands_with_errors+correct_commands
 In [7]: print(r1.send_config_commands(commands, strict=False))
         При выполнении команды "logging 0255.255.1" на устройстве 192.168.100.1 возникла ошибка -> Invalid input detected at '^' marker.
         При выполнении команды "logging" на устройстве 192.168.100.1 возникла ошибка -> Incomplete command.
-        При выполнении команды "a" на устройстве 192.168.100.1 возникла ошибка ->␣Ambiguous command: "a"
+        При выполнении команды "a" на устройстве 192.168.100.1 возникла ошибка -> Ambiguous command: "a"
         conf t
         Enter configuration commands, one per line. End with CNTL/Z.
         R1(config)#logging 0255.255.1
