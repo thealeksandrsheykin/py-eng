@@ -1,0 +1,7 @@
+Value intf (\S+)
+Value status (up|down|deleted|admin down)
+Value protocol (up|down)
+Value description (\S.*)
+
+Start
+  ^${intf}\s+${status}\s+${protocol}\s+${description} -> Record
