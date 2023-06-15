@@ -1,0 +1,3 @@
+Template, Hostname, Vendor, Command
+sh_ip_int_br.template, .*, cisco, sh[[ow]] ip int[[erface]] br[[ief]]
+sh_int_desc.template, .*, cisco, sh[[ow]] int[[erfaces]] des[[cription]]
