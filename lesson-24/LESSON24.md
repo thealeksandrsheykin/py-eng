@@ -48,7 +48,7 @@ Out[4]: 'Interface        IP-Address      OK?   Method Status Protocol
 
 ## Задание №3
 
-Создать класс MyNetmiko, который наследует класс `CiscoIosSSH` из netmiko. Переписать метод `__init__` в классе `MyNetmiko` 
+Создать класс `MyNetmiko`, который наследует класс `CiscoIosSSH` из netmiko. Переписать метод `__init__` в классе `MyNetmiko` 
 таким образом, чтобы после подключения по SSH выполнялся переход в режим enable. Для этого в методе `__init__` должен 
 сначала вызываться метод `__init__` класса `CiscoIosBase`, а затем выполнялся переход в режим enable. Проверить, что в 
 классе `MyNetmiko` доступны методы `send_command` и `send_config_set` (они наследуются автоматически, это только для 
