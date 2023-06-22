@@ -79,3 +79,43 @@ device_params = {
     "secret": "cisco",
 }
 ```
+
+## Задание №4
+
+Скопировать и дополнить класс `MyNetmiko` из задания №3. Добавить метод `_check_error_in_command`, который выполняет проверку
+на такие ошибки:
+1. Invalid input detected
+2. Incomplete command
+3. Ambiguous command
+
+Метод ожидает как аргумент команду и вывод команды. Если в выводе не обнаружена ошибка, метод ничего не возвращает. Если
+в выводе найдена ошибка, метод генерирует исключение `ErrorInCommand` с сообщением о том какая ошибка была обнаружена, на
+каком устройстве и в какой команде. Переписать метод `send_command` netmiko, добавив в него проверку на ошибки.
+
+```python
+In [2]: from exercise04 import MyNetmiko
+In [3]: r1 = MyNetmiko(**device_params)
+In [4]: r1.send_command('sh ip int br')
+Out[4]: 'Interface        IP-Address      OK?   Method Status Protocol
+         Ethernet0/0      192.168.100.1   YES    NVRAM   up      up
+         Ethernet0/1      192.168.200.1   YES    NVRAM   up      up 
+         Ethernet0/2      190.16.200.1    YES    NVRAM   up      up 
+         Ethernet0/3      192.168.230.1   YES    NVRAM   up      up 
+         Ethernet0/3.100  10.100.0.1      YES    NVRAM   up      up 
+         Ethernet0/3.200  10.200.0.1      YES    NVRAM   up      up 
+         Ethernet0/3.300  10.30.0.1       YES    NVRAM   up      up'
+
+In [5]: r1.send_command('sh ip br')
+---------------------------------------------------------------------------
+ErrorInCommand Traceback (most recent call last) <ipython-input-2-1c60b31812fd> in <module>() 1 r1.send_command('sh ip br')
+ErrorInCommand: При выполнении команды "sh ip br" на устройстве 192.168.100.1 возникла ошибка "Invalid input detected at '^' marker."
+```
+
+Исключение ErrorInCommand:
+
+```python
+class ErrorInCommand(Exception):
+"""
+    Исключение генерируется, если при выполнении команды на оборудовании, возникла ошибка.
+"""
+```
