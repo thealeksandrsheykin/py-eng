@@ -134,3 +134,33 @@ In [4]: r1.send_config_set('lo')
 ErrorInCommand Traceback (most recent call last)<ipython-input-2-8e491f78b235> in <module>() 1 r1.send_config_set('lo')
 ErrorInCommand: При выполнении команды "lo" на устройстве 192.168.100.1 возникла␣ошибка "Incomplete command."
 ```
+
+## Задание №6
+
+Скопировать класс MyNetmiko из задания 24.2b. Проверить, что метод send_command кроме
+команду, принимает еще и дополнительные аргументы, например, strip_command.
+Если возникает ошибка, переделать метод таким образом, чтобы он принимал любые аргументы, которые поддерживает netmiko.
+```python
+In [2]: from exercise06 import MyNetmiko
+In [3]: r1 = MyNetmiko(**device_params)
+In [4]: r1.send_command('sh ip int br', strip_command=False)
+Out[4]: 'sh ip int br
+         Interface        IP-Address      OK?   Method Status Protocol
+         Ethernet0/0      192.168.100.1   YES    NVRAM   up      up
+         Ethernet0/1      192.168.200.1   YES    NVRAM   up      up 
+         Ethernet0/2      190.16.200.1    YES    NVRAM   up      up 
+         Ethernet0/3      192.168.230.1   YES    NVRAM   up      up 
+         Ethernet0/3.100  10.100.0.1      YES    NVRAM   up      up 
+         Ethernet0/3.200  10.200.0.1      YES    NVRAM   up      up 
+         Ethernet0/3.300  10.30.0.1       YES    NVRAM   up      up'
+
+In [5]: r1.send_command('sh ip int br', strip_command=True)
+Out[5]: 'Interface        IP-Address      OK?   Method Status Protocol
+         Ethernet0/0      192.168.100.1   YES    NVRAM   up      up
+         Ethernet0/1      192.168.200.1   YES    NVRAM   up      up 
+         Ethernet0/2      190.16.200.1    YES    NVRAM   up      up 
+         Ethernet0/3      192.168.230.1   YES    NVRAM   up      up 
+         Ethernet0/3.100  10.100.0.1      YES    NVRAM   up      up 
+         Ethernet0/3.200  10.200.0.1      YES    NVRAM   up      up 
+         Ethernet0/3.300  10.30.0.1       YES    NVRAM   up      up'
+```
