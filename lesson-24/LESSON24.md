@@ -164,3 +164,35 @@ Out[5]: 'Interface        IP-Address      OK?   Method Status Protocol
          Ethernet0/3.200  10.200.0.1      YES    NVRAM   up      up 
          Ethernet0/3.300  10.30.0.1       YES    NVRAM   up      up'
 ```
+
+## Задача №7
+
+Скопировать класс `MyNetmiko` из задания №6 или задания №5. Добавить параметр `ignore_errors` в метод `send_config_set`.
+Если передано истинное значение, не надо выполнять проверку на ошибки и метод должен работать точно так же как метод
+`send_config_set` в netmiko. Если значение ложное, ошибки должны проверяться. По умолчанию ошибки должны игнорироваться.
+
+```python
+In [2]: from exercise07 import MyNetmiko
+In [3]: r1 = MyNetmiko(**device_params)
+In [6]: r1.send_config_set('lo')
+Out[6]: config term
+        Enter configuration commands, one per line. End with CNTL/Z.
+        R1(config)#lo
+        % Incomplete command.
+
+        R1(config)#end
+        R1#
+In [7]: r1.send_config_set('lo', ignore_errors=True)
+Out[7]: 'config term
+         Enter configuration commands, one per line. End with CNTL/Z.
+         R1(config)#lo
+         % Incomplete command.
+
+         R1(config)#end
+         R1#
+         
+In [8]: r1.send_config_set('lo', ignore_errors=False)
+---------------------------------------------------------------------------
+ErrorInCommand Traceback (most recent call last) <ipython-input-8-704f2e8d1886> in <module>() 1 r1.send_config_set('lo', ignore_errors=False)
+ErrorInCommand: При выполнении команды "lo" на устройстве 192.168.100.1 возникла␣ошибка "Incomplete command."
+```
