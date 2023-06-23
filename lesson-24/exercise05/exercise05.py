@@ -39,4 +39,4 @@ if __name__ == '__main__':
         devices = yaml.safe_load(file)
         for device in devices:
             dev = MyNetmiko(**device)
-            print(dev.send_config_set('lo'))
+            print(dev.send_config_set(['sh ip int br']))
